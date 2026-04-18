@@ -279,44 +279,40 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 205,
 		gen: 3,
 	},
-		arceusring: {
+	arceusring: {
 		name: "Arceus Ring",
-		spritenum: 9999, // Placeholder sprite ID
+		spritenum: 9999,
 		fling: {
 			basePower: 10,
 		},
 		onStart(pokemon) {
 			this.add('-item', pokemon, 'Arceus Ring');
 			for (const target of this.getAllActive()) {
-				const bsp = Object.values(target.species.baseStats).reduce((a, b) => a * b, 1);
-				this.add('-message', `${target.name}'s Base Stat Product: ${bsp.toLocaleString()}`);
+				const bsp = target.species.baseStats.hp * target.species.baseStats.atk * target.species.baseStats.def * target.species.baseStats.spa * target.species.baseStats.spd * target.species.baseStats.spe;
+				this.add('-message', `The Product of ${target.name} is ${bsp.toLocaleString()}`);
 			}
 		},
 		onAnySwitchIn(pokemon) {
-			const bsp = Object.values(pokemon.species.baseStats).reduce((a, b) => a * b, 1);
-			this.add('-message', `${pokemon.name}'s Base Stat Product: ${bsp.toLocaleString()}`);
+			const bsp = pokemon.species.baseStats.hp * pokemon.species.baseStats.atk * pokemon.species.baseStats.def * pokemon.species.baseStats.spa * pokemon.species.baseStats.spd * pokemon.species.baseStats.spe;
+			this.add('-message', `The Product of ${pokemon.name} is ${bsp.toLocaleString()}`);
 		},
 		onModifyMove(move, pokemon, target) {
-			// +10 Priority
 			move.priority += 10;
-			// 3x Power
 			move.basePowerModifier = (move.basePowerModifier || 1) * 3;
-			
 			if (!target) return;
-			// Ignore advantages (Types/Abilities/Items) if Holder BSP > Target BSP
-			const holderBSP = Object.values(pokemon.species.baseStats).reduce((a, b) => a * b, 1);
-			const targetBSP = Object.values(target.species.baseStats).reduce((a, b) => a * b, 1);
-			
+			const holderBSP = pokemon.species.baseStats.hp * pokemon.species.baseStats.atk * pokemon.species.baseStats.def * pokemon.species.baseStats.spa * pokemon.species.baseStats.spd * pokemon.species.baseStats.spe;
+			const targetBSP = target.species.baseStats.hp * target.species.baseStats.atk * target.species.baseStats.def * target.species.baseStats.spa * target.species.baseStats.spd * target.species.baseStats.spe;
 			if (holderBSP > targetBSP) {
 				move.ignoreAbility = true;
 				move.ignoreDefensive = true;
 				move.ignoreEvasion = true;
-				// This bypasses type resistances/immunities
-				move.typeChanger = (move, pokemon, target, sourceEffect) => {
-					move.type = '???'; 
+				move.typeChanger = (move) => {
+					move.type = '???';
 				};
 			}
 		},
+		desc: "Reveals the Product of all Pokemon on the field and updates in real-time. Holder's moves have +10 priority and 3x power. Ignores target's advantages if Holder's Base Stat Product is greater than the Target's.",
+		shortDesc: "Reveals Product; moves have +10 priority, 3x power, and ignore advantages if higher BSP.",
 		num: 9999,
 		gen: 9,
 	},
