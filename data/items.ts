@@ -280,7 +280,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 	},
 	arceusring: {
-		name: "Arceus's Ring",
+		name: "Arceus Ring",
 		spritenum: 9999,
 		fling: {
 			basePower: 80,
@@ -311,8 +311,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				};
 			}
 		},
-		desc: "Reveals the Product of all Pokemon on the field and updates in real-time. Holder's moves have +10 priority and 3x power. Ignores target's advantages if Holder's Base Stat Product is greater than the Target's.",
-		shortDesc: "Reveals Product; moves have +10 priority, 3x power, and ignore advantages if higher BSP.",
 		num: 5423,
 		gen: 8,
 	},
