@@ -4441,6 +4441,72 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
+	omnipotentplate: {
+		name: "Omnipotent Plate",
+		spritenum: 5429,
+		onTakeItem(item, pokemon, source) {
+			if ((source && source.baseSpecies.num !== 493) || pokemon.baseSpecies.num !== 493) {
+				return false;
+			}
+			return true;
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target || move.id !== 'judgment') return;
+			const judgmentTable = {
+				'Ice': 3,
+				'Rock': 1,
+				'Psychic': 1,
+				'Grass': 1,
+				'Fighting': 0,
+				'Bug': 0,
+				'Dragon': -1,
+				'Water': -2,
+				'Electric': -2,
+				'Poison': -3,
+				'Fire': -3,
+				'Normal': -Infinity,
+				'Flying': -Infinity,
+				'Ground': -Infinity,
+				'Ghost': -Infinity,
+				'Steel': -Infinity,
+				'Dark': -Infinity,
+				'Fairy': -Infinity,
+			};
+			if (type in judgmentTable) return judgmentTable[type];
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.baseSpecies.num === 493) {
+				move.hasSTAB = true;
+			}
+		},
+		onSourceEffectiveness(typeMod, target, type, move) {
+			if (target?.baseSpecies.num !== 493) return;
+			const arceusTable = {
+				'Rock': 1,
+				'Flying': 0,
+				'Fire': 0,
+				'Water': 0,
+				'Ice': 0,
+				'Fairy': 0,
+				'Steel': -1,
+				'Dark': -1,
+				'Bug': -4,
+				'Grass': -4,
+				'Normal': -Infinity,
+				'Fighting': -Infinity,
+				'Poison': -Infinity,
+				'Ground': -Infinity,
+				'Ghost': -Infinity,
+				'Electric': -Infinity,
+				'Psychic': -Infinity,
+				'Dragon': -Infinity,
+			};
+			if (type in arceusTable) return arceusTable[type];
+		},
+		forcedForme: "Arceus",
+		num: 5429,
+		gen: 6,
+	},
 	oranberry: {
 		name: "Oran Berry",
 		spritenum: 319,
@@ -4628,6 +4694,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 762,
 		gen: 6,
 		isNonstandard: "Past",
+	},
+	piercingglove: {
+		name: "Piercing Glove",
+		spritenum: 5428,
+		onModifyMove(move) {
+			if (move.flags['contact']) {
+				delete move.flags['protect'];
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['contact']) {
+				return this.chainModify(0.25);
+			}
+		},
+		num: 5428,
+		gen: 3,
 	},
 	pikaniumz: {
 		name: "Pikanium Z",
@@ -6037,6 +6120,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 2,
 		isPokeball: true,
 	},
+	spreadamplifier: {
+		name: "Spread Amplifier",
+		spritenum: 5427,
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.target === 'allAdjacentFoes' || move.target === 'allAdjacent') {
+				return this.chainModify([4, 3]);
+			}
+		},
+		onModifyMove(move) {
+			if (move.target === 'normal' || move.target === 'any' || move.target === 'allAdjacent') {
+				move.target = 'allAdjacentFoes';
+			}
+		},
+		num: 5427,
+		gen: 3,
+	},
 	staraptite: {
 		name: "Staraptite",
 		spritenum: 500,
@@ -6274,6 +6374,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onModifyMove(move, pokemon, target) {
+			move.ignoreAbility = true;
+			move.ignoreDefensive = true;
+			move.ignoreEvasion = true;
 			move.tracksTarget = true;
 			move.ignoresProtect = true;
 		},
