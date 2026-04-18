@@ -322,6 +322,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				move.ignoreAbility = true;
 				move.ignoreDefensive = true;
 				move.ignoreEvasion = true;
+				move.ignoreProtect = true;
 				move.typeChanger = (move) => {
 					move.type = '???';
 				};
@@ -6259,6 +6260,31 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 1116,
 		gen: 8,
+	},
+	swiftstrike: {
+		name: "Swift Strike",
+		spritenum: 5426,
+		fling: {
+			basePower: 30,
+		},
+		onBasePower(basePower, user, target, move) {
+			if (user.speed > target.speed) {
+				this.debug('Swift Strike 3x boost');
+				return this.chainModify(3);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			move.tracksTarget = true;
+			move.ignoresProtect = true;
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (source.speed > target.speed && target.runEffectiveness(move) < 0) {
+				this.debug('Swift Strike ignoring resistance');
+				return this.chainModify([1, target.runEffectiveness(move)]); 
+			}
+		},
+		num: 5426,
+		gen: 3,
 	},
 	syrupyapple: {
 		name: "Syrupy Apple",
