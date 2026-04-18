@@ -122,7 +122,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		num: 5424,
-		gen: 5,
+		gen: 4,
 	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
@@ -328,7 +328,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		num: 5423,
-		gen: 5,
+		gen: 4,
 	},
 	armorfossil: {
 		name: "Armor Fossil",
@@ -4476,7 +4476,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		num: 5425,
-		gen: 5,
+		gen: 3,
 	},
 	ovalstone: {
 		name: "Oval Stone",
