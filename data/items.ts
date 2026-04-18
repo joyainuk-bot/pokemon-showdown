@@ -279,6 +279,47 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 205,
 		gen: 3,
 	},
+		arceusring: {
+		name: "Arceus Ring",
+		spritenum: 9999, // Placeholder sprite ID
+		fling: {
+			basePower: 10,
+		},
+		onStart(pokemon) {
+			this.add('-item', pokemon, 'Arceus Ring');
+			for (const target of this.getAllActive()) {
+				const bsp = Object.values(target.species.baseStats).reduce((a, b) => a * b, 1);
+				this.add('-message', `${target.name}'s Base Stat Product: ${bsp.toLocaleString()}`);
+			}
+		},
+		onAnySwitchIn(pokemon) {
+			const bsp = Object.values(pokemon.species.baseStats).reduce((a, b) => a * b, 1);
+			this.add('-message', `${pokemon.name}'s Base Stat Product: ${bsp.toLocaleString()}`);
+		},
+		onModifyMove(move, pokemon, target) {
+			// +10 Priority
+			move.priority += 10;
+			// 3x Power
+			move.basePowerModifier = (move.basePowerModifier || 1) * 3;
+			
+			if (!target) return;
+			// Ignore advantages (Types/Abilities/Items) if Holder BSP > Target BSP
+			const holderBSP = Object.values(pokemon.species.baseStats).reduce((a, b) => a * b, 1);
+			const targetBSP = Object.values(target.species.baseStats).reduce((a, b) => a * b, 1);
+			
+			if (holderBSP > targetBSP) {
+				move.ignoreAbility = true;
+				move.ignoreDefensive = true;
+				move.ignoreEvasion = true;
+				// This bypasses type resistances/immunities
+				move.typeChanger = (move, pokemon, target, sourceEffect) => {
+					move.type = '???'; 
+				};
+			}
+		},
+		num: 9999,
+		gen: 9,
+	},
 	armorfossil: {
 		name: "Armor Fossil",
 		spritenum: 12,
