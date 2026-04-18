@@ -280,10 +280,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 	},
 	arceusring: {
-		name: "Arceus Ring",
+		name: "Arceus's Ring",
 		spritenum: 9999,
 		fling: {
-			basePower: 10,
+			basePower: 80,
 		},
 		onStart(pokemon) {
 			this.add('-item', pokemon, 'Arceus Ring');
