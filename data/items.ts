@@ -108,6 +108,22 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 135,
 		gen: 4,
 	},
+	adaptiveblade: {
+		name: "Adaptive Blade",
+		spritenum: 5424, // Using your requested number
+		fling: {
+			basePower: 30,
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.baseStats.atk > pokemon.baseStats.spa) {
+				move.category = 'Physical';
+			} else if (pokemon.baseStats.spa > pokemon.baseStats.atk) {
+				move.category = 'Special';
+			}
+		},
+		num: 5424,
+		gen: 9,
+	},
 	adrenalineorb: {
 		name: "Adrenaline Orb",
 		spritenum: 660,
@@ -4445,6 +4461,22 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 155,
 		gen: 3,
+	},
+	outlierlens: {
+		name: "Outlier Lens",
+		spritenum: 700, // Placeholder sprite
+		fling: {
+			basePower: 30,
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (!user.hasType(move.type)) {
+				this.debug('Outlier Lens boost');
+				return this.chainModify(1.5);
+			}
+		},
+		num: 5425,
+		gen: 9,
 	},
 	ovalstone: {
 		name: "Oval Stone",
