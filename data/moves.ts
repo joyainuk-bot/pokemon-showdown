@@ -1755,7 +1755,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, heal: 1 },
-		drain: [1, 2],
+		drain: [1,1],
 		target: "normal",
 		type: "Water",
 		contestType: "Clever",
